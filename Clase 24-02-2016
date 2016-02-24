@@ -1,0 +1,39 @@
+##PRACTICA JACQUELINE##
+require(foreign)
+COE1T215 <- read.dbf("G:\\Octavo semestre\\Series de Tiempo\\COE1T215.dbf")
+View(COE1T215)
+coe1 <- subset(COE1T215, ENT == 21)
+coe1
+
+require(questionr)
+str(coe1$P3L)
+coe1$P3L<- ordered(coe1$P3L, levels = c("01","02","03","04","05","06","07","08","09","10","11","99"), labels= c("1 persona", "2-5 personas","6-10 personas", "11-15 personas","16-20 personas", "21-30 personas","31-50 personas", "51-100 personas", "101-250 personas", "251-500 personas", "500 o + personas", "No sabe"))
+table(coe1$P3L)
+
+coe1$P5<- ordered(coe1$P5, levels = c("1","2","3","4","9"), labels= c("de día? entre 6am y 8 pm", "de noche? entre 8pm y 6am","mixta?", "rola turnos?","No sabe"))
+table(coe1$P5)
+
+coe1$P2E<- ordered(coe1$P2E, levels = c("1","2","3","4","5","6","9"), labels= c("una persona temporalmente ausente de su actividad u oficio?", "pensionado o jubilado de su empleo?","estudiante?", "una persona que se dedica a los quehaceres de su?","una persona con alguna limitacion física o mental que le impide trabajar por el resto de su vida?","Otra condición", "No sabe"))
+table(coe1$P2E)
+
+coe1$P1<- ordered(coe1$P1, levels = c("1","2"), labels= c("SI TRABAJA", "NO TRABAJA"))
+table(coe1$P1)
+
+##CRUZAR TABLAS
+table(coe1$P3L,coe1$P5)
+table(coe1$P5,coe1$P2E)
+table(coe1$P2E, coe1$P3L)
+
+##Expandir tablas
+c2<- wtd.table(coe1$P3L, weights = coe1$FAC)
+table(c2)
+View(c2)
+c3<- wtd.table(coe1$P5, weights = coe1$FAC)
+table(c3)
+View(c3)
+c4<- wtd.table(coe1$P2E, weights = coe1$FAC)
+table(c4)
+View(c4)
+c5<- wtd.table(coe1$P1, weights = coe1$FAC)
+table(c5)
+View(c5)
