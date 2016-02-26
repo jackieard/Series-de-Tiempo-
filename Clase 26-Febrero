@@ -1,0 +1,54 @@
+##CLASE 26 FEBRERO
+#Limpia el entrno de trabajo
+rm (list = ls())
+
+#Cargar las bases de datos
+install.packages("foreign")
+require(foreign)
+SDEMT215 <- data.frame(read.dbf("F:\\Octavo semestre\\Series de Tiempo\\SDEMT215.dbf"))
+COE1T215 <- data.frame(read.dbf("COE1T215.dbf"))
+
+##METDODO 1
+##attach (SDEMT215)
+SDEMT215$CLASE2.1[as.numeric(SDEMT215$CLASE2) >= 0 & as.numeric(SDEMT215$CLASE2) <= 2] <-1
+SDEMT215$CLASE2.1[as.numeric(SDEMT215$CLASE2) >= 3 & as.numeric(SDEMT215$CLASE2) <= 4] <-2
+##detach (SDEMT215)
+
+##METODO 2
+attach (SDEMT215)
+SDEMT215$CLASE2.2 <- ifelse(as.numeric(CLASE2) >= 1 & as.numeric(CLASE2) <= 2,1, 
+                            ifelse(as.numeric(CLASE2) >= 3 & as.numeric(CLASE2) <= 3,2, 3))
+
+##COMPARACION DE LOS METODOS
+table(SDMET215$CLASE2.1)
+table(SDEMT215$CLASE2.2)
+
+table(SDEMT215$EDAD11)
+
+##EJERCICIO RECODIFICAR VARIABLE EDAD
+#0-14=1 niñ@, 15-29= 2 jovenes, 30-59= 3 adultos, 60-97= 4 adultos mayores, 98-99= 5 No especificado.
+#POR LOS DOS METODOS, DESPUES ETIQUETAR LOS GRUPOS Y COMPARAR METODOS
+
+#METODO 1
+SDEMT215$ED1[as.numeric(SDEMT215$EDA) >= 1 & as.numeric(SDEMT215$EDA) <= 15] <-1
+SDEMT215$ED1[as.numeric(SDEMT215$EDA) >= 16 & as.numeric(SDEMT215$EDA) <= 30] <-2
+SDEMT215$ED1[as.numeric(SDEMT215$EDA) >= 31 & as.numeric(SDEMT215$EDA) <= 60] <-3
+SDEMT215$ED1[as.numeric(SDEMT215$EDA) >= 61 & as.numeric(SDEMT215$EDA) <= 98] <-4
+SDEMT215$ED1[as.numeric(SDEMT215$EDA) >= 99 & as.numeric(SDEMT215$EDA) <= 100] <-5
+
+SDEMT215$ED1 <- ordered(SDEMT215$ED1, levels = c(1:5), labels= c("NIÑ@S", "JOVENES", "ADULTOS", "ADULTOS MAYORES", "NO ESPECIFICADO"))
+table(SDEMT215$ED1)
+
+#METODO 2
+SDEMT215$ED2 <- ifelse(as.numeric(EDA) >= 1 & as.numeric(EDA) <= 15,1, 
+                ifelse(as.numeric(EDA) >= 16 & as.numeric(EDA) <= 30,2, 
+                ifelse(as.numeric(EDA) >= 31 & as.numeric(EDA) <= 60,3, 
+                ifelse(as.numeric(EDA) >= 61 & as.numeric(EDA) <= 98,4, 5))))
+
+SDEMT215$ED2 <- ordered(SDEMT215$ED2, levels = c(1:5), labels= c("NIÑ@S", "JOVENES", "ADULTOS", "ADULTOS MAYORES", "NO ESPECIFICADO"))
+table(SDEMT215$ED2)
+
+#COMPARACION
+table(SDEMT215$ED1)
+table(SDEMT215$ED2)
+                    
