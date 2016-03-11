@@ -1,0 +1,18 @@
+##1) Generar un data frame con la tasa de desocupacion que inicia en el primer trimestre del 2005,
+##Tasa de desocupacion 3.4, 4.8,3.3, 5.6, 3.2, 2.9, 1.9, 2.8, 6.0, 4.3, 2.2
+##2) convertirla en serie de tiempo y graficar la ST y la tendencia 
+##***punto extra librarla del segundo examen...
+##3) Obtener un pdf , .jpg. tiff. png con las dos graficas en una misma imagen
+##github martes 8  antes de las 11:59 hrs.....
+
+dtd <- c(3.4, 4.8, 3.3, 5.6, 3.2, 2.9, 1.9, 2.8, 6.0, 4.3, 2.2, NA)
+td <- data.frame(dtd)
+class(td)
+ST_td <- ts(td, start = 2005, end = 2008, frequency = 4)
+class(ST_td)
+ST_td
+jpeg(filename = "Tasa de desocupación.jpg")
+layout(1:2)
+plot(ST_td, main="Tasa de desocupación,2005-2007", xlab="Años", ylab="Tasa", col="blue")
+plot(aggregate(ST_td), col="red")
+dev.off()
