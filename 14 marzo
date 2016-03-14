@@ -1,0 +1,41 @@
+###Importar matriz INEGI
+indi3 <- ts(read.csv("F:\\Octavo semestre\\Series de Tiempo\\jackieard.csv"), frequency = 4, start = 2005);
+class(indi3)
+desoparcial <- ts(indi3[,1], start = 2005, frequency = 4)
+asala <- ts(indi3[,2], start = 2005, frequency = 4)
+til1 <- ts(indi3[,3], start = 2005, frequency = 4)
+
+seriemultiple <- ts.intersect(desoparcial, asala, til1) #Serie de tiempo multiple con las 4 variables
+seriemultiple
+#Grafica de series de tiempo multiple
+plot(seriemultiple, main= "Serie de tiempo multiple", xlab="Años", ylab= "Número de personas", col="violet") #
+til1 <- ts(indi3[,3], start = 2007, frequency = 4)
+
+
+#Separar la serie dependiendo del análisis
+seriemultiple05.09 <- window(seriemultiple, start = c(2005,1), end = c(2009,4))
+seriemultiple10.15 <- window(seriemultiple, start = c(2010,1), end = c(2015,4))
+
+plot(seriemultiple05.09, main = "Serie de tiempo multiple de Ciudad de Toluca", xlab = "Años", ylab = "Número de personas", col = "green")
+plot(seriemultiple10.15, main = "Serie de tiempo multiple de Ciudad de Toluca", xlab = "Años", ylab = "Número de personas", col = "red")
+
+start(seriemultiple); end(seriemultiple)
+
+
+
+##EJERCICIO EN EQUIPO##
+
+##Jacqueline Arredondo Ramírez
+## Victor Hugo Valdes Cedillo
+compe <- ts(read.csv("F:\\Octavo semestre\\Series de Tiempo\\competitividad.csv"), frequency = 1, start = 2001);
+plot(compe, main = "Indice de Competividad", xlab = "Año", ylab= "País", col = "violet")
+
+alema <- ts(compe[,1], start = 2001, frequency = 1)
+argen <- ts(compe[,2], start = 2001, frequency = 1)
+austra <- ts(compe[,3], start = 2001, frequency = 1)
+austri <- ts(compe[,4], start = 2001, frequency = 1)
+
+seriemultiple <- ts.intersect(alema, argen, austra, austri)
+seriemultiple
+
+plot(seriemultiple, main= "Serie de tiempo multiple de IC", xlab="Año", ylab= "País", col="orange")
