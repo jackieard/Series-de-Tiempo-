@@ -1,0 +1,51 @@
+### Generar 4 objetos con datos aleatorios y que tengan 60 datos ###
+## dato 1 de número de profesionista (mill)rango de 5 a 8
+prof <- sample(5:8, 60, replace = T)
+prof
+## dato 2 crec pib rango de 0 a 5
+crec_pib <- sample(0:5, 60, replace = T)
+crec_pib
+## dato 3 porcentaje de ocupados rango de 40 a 60
+porc_ocupa <- sample(40:60, 60, replace = T)
+porc_ocupa
+## dato 4 porcentaje de desocupados rango de 3 a 8
+porc_desocupa <- sample(3:8, 60, replace = T)
+porc_desocupa
+
+# 1) una vez que generen los datos hacer un data frame de los 4 objetos
+objetos <- data.frame(prof, crec_pib, porc_ocupa, porc_desocupa)
+objetos
+# 2) mostrar en consola los primeros 12 y ultimos 12 datos
+datos <- objetos [c(1:12,49:60),]
+datos
+# 3) convertir los objetos en series de tiempo desde el data frame comezando 
+# en 2010 y son datos mensuales.
+profts <- ts(prof, frequency = 12, start = (2010))
+profts
+crec_pibts <- ts(crec_pib, frequency = 12, start = (2010))
+crec_pibts
+porc_ocupats <- ts(porc_ocupa, frequency = 12, start = (2010))
+porc_ocupats
+porc_desocupats <- ts(porc_desocupa, frequency = 12, start = (2010))
+porc_desocupats
+# 4) graficar los profesionistas y ocupados en la misma imagen
+plot(cbind(profts,porc_ocupats))
+# 5) graficar pib y desocupados en la misma imagen
+plot(cbind(crec_pibts,porc_desocupats))
+# 6) graficar todas juntas
+plot(cbind(profts,porc_ocupats,crec_pibts,porc_desocupats))
+# 7) creaR serie de tiempo multiple!!!!
+seriemultiple <- ts.intersect(profts,porc_ocupats,crec_pibts,porc_desocupats)
+seriemultiple
+# 8) graficar serie de tiempo multiple 
+plot(seriemultiple, main= "Serie de tiempo multiple", xlab="Año", ylab= "Datos", col="violet")
+# 9) dividir serie de tiempo y graficar solo el ultimo año...
+seriemultiple1 <- window(seriemultiple, start = c(2010,1), end = c(2014,12))
+seriemultiple1
+seriemultiple2 <- window(seriemultiple, start = c(2014,1), end = c(2014,12))
+seriemultiple2
+plot(seriemultiple2, main = "Serie de tiempo multiple del ultimo año", xlab = "Año", ylab = "Datos", col = "red")
+# 10) analizar las graficas (si hay alguna tendencia o variacion estacional)(investigar)
+plot(aggregate(seriemultiple), main= "Tendencia", xlab ="Años", ylab = "Variables", col="green")
+plot
+#La grafica muestra una tendencia ya que la serie muestra un movimientio regular en los años. 
