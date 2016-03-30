@@ -1,0 +1,91 @@
+ICA <- ts(read.csv(("F:\\Octavo semestre\\Series de Tiempo\\ica acciones.csv"), header = T), frequency = 252, start = 2000) #En este caso, es T xq si queremos que se repitan los datos. 
+ICA
+
+#La descomposicion de la serie de tiempo nos permite conocer la estacionalidad, la tendencia y la aleatoriedad de la ST.
+#Para descomponer una serie de tiempo se utiliza la funcion de decompose()
+
+#Para descomponer
+icaadi <- decompose(ICA)
+icaadi
+
+#Para ver graficamente una descomposición de la ST en R existen dos formas de graficar la descomposicion
+# 1) Directo de la serie de tiempo
+plot(decompose(ICA))
+plot(icaadi)
+#En estos casos nos debe dar el mismo resultado 
+#Ahora como vimos la clase pasada hay dos modelos que podemos descomponer la ST
+# 1) modelo aditivo......x t = m t + s t + z t
+# 2) modelo multiplicativo .... x t = m t · s t + z t
+
+#Ahora para descomponer una serie en un modelo aditivo.... 
+#tdesocadi <- decompose(tdesoc) #aqui es para descomponer la serie de tiempo  por default nos 
+#Da el modelo aditivo
+#Ahora para descomponer una ST en un modelo multiplicativo 
+icamult <- decompose(ICA, type = "mult")
+################# graficamos los dos modelos
+plot(icaadi)
+plot (icamult)
+###3 ahora bien como mencionamos anteriormente al descomponer una ST tenemos diversos elementos
+#la descomposicion de ST nos genera diversos elementos como la estacionalidad, la tendencia
+# y la aleatoriedad..... son los elementos que nos interesan....para esto se utiliza la 
+# función names()
+names (icaadi) ### con names mandamos llamar los elementos que tiene el objeto
+icaadi$type
+names (icamult)
+
+### Ahora para asignar un objeto para los elementos que nos interesan se realiza de la sig
+### manera
+
+
+tendad <- icaadi$trend#### asignamos la tendencia del modelo aditivoa
+icaadi$trend
+
+tendmult <- tdesocmult$trend #### asignamos la tendencia del modelo multiplicativo
+estadi <- icaadi$seasonal### asignamos la estacionalidad del modelo aditivoa
+estmult <- tdesocmult$seasonal#### asignamos la estacionalidad del modelo multiplicativo
+#### ahora para graficar la tendencia, estacionalidad... etc
+
+ts.plot(cbind(tendad, tendad * estadi), lty = 1:2, col = c(54, 32)) ### lty sirve para ver diferentes tipos de
+## lineas
+
+######## algunos de las funciones utilizadas en ST 
+
+ts ## genera una ST de un objeto... 
+window ### extrae o divide uan ST 
+ts.plot### GRAFICA ST 
+decompose ### DESCOMPONe una st en sus principales elementos
+
+
+####################################EJERCICIO####################
+### bimbo
+### descomponer en modelo aditivo y multiplicativo
+### graficarlos 
+### extraer la tendencia y estacionalidad y aleatoriedad
+### exportar la tendencia y estaciona y aleatoriedad en 3 columnas en excel 
+### graficar... tendencia y tendencia * estacionalidad en R
+bimbo <- ts(read.csv(("F:\\Octavo semestre\\Series de Tiempo\\BIMBO.csv"), header = T), frequency = 252, start = 2000) #En este caso, es T xq si queremos que se repitan los datos. 
+bimbo
+
+bimbode <- decompose(bimbo)
+bimbode
+
+plot(decompose(bimbo))
+plot(bimbode)
+
+bimbomult <- decompose(bimbo, type = "mult")
+bimbomult
+plot(bimbomult)
+
+names(bimbode)
+bimbode$type
+names (bimbomult)
+
+tendad <- bimbode$trend
+tendad
+bimbode$trend
+
+tendmult <- bimbomult$trend
+estadi <- bimbode$seasonal
+estmult <- bimbomult$seasonal
+
+ts.plot(cbind(tendad, tendad * estadi), lty = 1:2, col = c(54, 32))
