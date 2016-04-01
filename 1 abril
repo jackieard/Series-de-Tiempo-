@@ -1,0 +1,79 @@
+#Normalmente se utiliza el modelo aditivo...
+#Este modelo es apropiado cuando la magnitud de las fluctuaciones estacionales no 
+#varia al hacerlo la tendencia.
+
+#Se utiliza multiplicativo
+#Cuandp la magnitud de las fluctuaciones estacionales de la serie crece y decrece 
+#proporcionalmente con los crecimientos y decrecimientos de la tendencia, respect.
+
+#Una vez que logramos descomponer la st en diversos los elementos de estacionali-
+#dady tendencia hay que desestacionalizar la st y eliminar la tendencia 
+
+#EXISTE TENDENCIA CUANDO existe un patron en los datos  a largo plazo ya sea que 
+#aumenta o disminuye los datos.
+
+#La estacionalidad existe cuando la ST cuando es influenciado por factores }
+#estacionales (por ejemplo, trimestre del año , el mes , o el día de la semana). 
+
+#Existen componente de ciclicos en los datos cuando se detectan  incrementos y 
+#caídas que no son de tiempo determinado(duración por lo general de al menos 2años).
+
+#De estos 3 elemenos normalmente existen confusiones para detectarlos entre la 
+#estacionalidad y el componente ciclico
+
+#Principales diferencias entre estos dos componentes 
+# 1)Patrón estacional longitud constante ; patrón cíclico Longitud variable
+# 2)Duración media del componente ciclico  más largo que la longitud del patrón estacional)
+# 3)Magnitud de ciclico más variable que magnitud del patrón estacional
+# 4)El momento de picos y caidas es predecible con los datos estacionales, 
+#   pero impredecible a largo plazo con datos cíclicos .
+
+install.packages("fpp")
+library(fpp)
+plot(window(elec,start=1980),ylab="GWh",xlab="Year",main="Australian electricity production", col = 198)
+##Existe estacionalidad, tendencia y no existen componentes ciclicos.
+
+#ESTA, TENDENCIA Y CICLICO
+plot(bricksq,ylab="million units",xlab="Year",main="Australian clay brick production", col = "blue")
+
+#ESTA Y CICLO NO MUCHO TENDENCIOA
+plot(hsales,main="Sales of new one-family houses, USA",ylab="Total sales",xlab="Year")
+#NO ESTA NI TENDENCIA, POSIBLE CICLO
+
+##EJEMPLOS GRAFICAS DETECTAR TENDENCIA, ESTACIONALIDAD Y CICLO
+
+appl <- read.csv ("F:\\Octavo semestre\\Series de Tiempo\\appl.csv", header = T)
+applts <- ts(appl[,5], start = 2000, frequency = 12)
+plot(applts, main ="Valor de acciones de APPLE", ylab = "Valor de cierre")
+
+femsa <- read.csv ("F:\\Octavo semestre\\Series de Tiempo\\femsa.csv", header = T)
+femsats <- ts(femsa[,5], start = 2000, frequency = 12)
+plot(femsats, main ="Valor de acciones de FEMSA", ylab = "Valor de cierre")
+
+bimbo <- read.csv ("F:\\Octavo semestre\\Series de Tiempo\\bimbomx.csv", header = T)
+bimbots <- ts(bimbo[,5], start = 2000, frequency = 12)
+plot(bimbots, main ="Valor de acciones de BIMBO", ylab = "Valor de cierre")
+
+plot(cbind(applts,femsats,bimbots), main = "Valor de las acciones", xlab= "Años")
+
+jpeg(filename = "acciones.jpg")
+layout(1:3)
+plot(applts, main ="Valor de acciones de APPLE", ylab = "Valor de cierre", col = "violet")
+plot(femsats, main ="Valor de acciones de FEMSA", ylab = "Valor de cierre", col = "green")
+plot(bimbots, main ="Valor de acciones de BIMBO", ylab = "Valor de cierre", col = "skyblue")
+dev.off()
+
+#Para apple existe una estacionalidad en los años 2000 a 2006, ya que sus acciones se
+#matuvieron constantes, sin embargo del año 2007 a 2014 se mostro una tendencia, 
+#a la alza en los precios de sus acciones, pero se muestra un componente ciclico en 
+#en el 2014, y se volvio a mostrar una estacionalidad.
+
+#En el caso de FEMSA del año 2000 a 2006 se mostro una tendencia del alza de sus 
+#acciones, teniendo estas una componete ciclico en el ultimo año mencionado,sin 
+#embargo pudieron recuperarse y se mostro de nuevo una tendencia a la alza en el 
+#precio de sus acciones.
+
+#Por ultimo bimbo, desde el año 2000 mostro una tendencia en el valor de sus acciones, 
+#pero de igual manera una estacionalidad en algunos periodos de los años, sus acciones
+#bajaron el precio en el año 2011, y de nuevo las acciones mostraron una estacionalidad
+#teniendo uan mínima tendencia. 
