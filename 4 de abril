@@ -1,0 +1,113 @@
+
+#Ahora bien una vez que tenemos y conocemos la gráfica para determinar con mayor 
+#precision las tendencias y estacionalidad se utiliza la funcion season plot que 
+#esta en la libreria fpp]
+
+appl <- read.csv ("F:\\Octavo semestre\\Series de Tiempo\\appl.csv", header = T)
+applts <- ts(appl[,5], start = 2000, frequency = 12)
+plot(applts, main ="Valor de acciones de APPLE", ylab = "Valor de cierre")
+
+install.packages ("fpp")
+require (fpp)
+seasonplot(applts,s= 12, year.labels=TRUE,
+           main="Valor acciones APPLE",
+           ylab="Valor cierre",col=rainbow(20),year.labels.left=TRUE,pch=19)
+
+#Con monthplot pódemos hacer un analisis de la st dependiendo del periodo de los 
+#datos por ejemplo si tenemos trimestral se pueden analizar los 4 trimestres.... 
+#en grafica
+
+monthplot(applts,ylab="valor cierre",xlab="Month",
+          main="valor acciones APPLE")
+
+#Funciones utilizadas
+ST graficas
+plot or plot.ts
+Grafica de temporalidad 
+seasonplot
+graficas de subseries temporales 
+monthplot
+
+#CORRELACION Y COVARIANZA
+#Covarianza y correlación : medida del grado
+#relación lineal entre dos variables (y Y x).
+
+# auto covarianza y auto correlaccion
+# Autocovarianza y autocorrelación : medida
+# relación lineal entre los valores retardados de una
+# series de tiempo y.
+
+# se mide  la relación entre: yt and yt−1
+# yt and yt−2
+# yt and yt−3, etc.
+
+#Para desestacionalizar y eliminar la tendencia necesitamos conocer la correlacion
+#de las variables para realizar mejores pronosticos de nuestra serie de tiempo 
+
+#En muchas casos las variables estan correlacionadas... entonces si nosotros 
+#logramos identificar la correlacion podemos mejorar los pronosticoa si las 
+#correlaciones son altasst la correlacion estructura en ST esta determinada por la 
+#función de correlacion y se estima para la ST observada para obtener la 
+#correlación se necesita obytener primero la covarianza.
+
+###Autocorrelación
+#A veces sucede que  los valores que toma una variable en el tiempo no son 
+#independientes entre sí, sino que un valor determinado depende de los valores 
+#anteriores,para obtener la correlación se necesita obtener primero la covarianza
+
+#COVARIANZA
+#La covarianza es una medida de asociación entre dos variables
+### Cov(x, y) =((xi - x (media))(yi - y ((media)))/(n - 1)
+#Ejemplo en R
+appl <- read.csv ("F:\\Octavo semestre\\Series de Tiempo\\appl.csv", header = T)
+applts <- ts(appl, start = 2000, frequency = 12)
+
+x <- applts [,2]
+y <- applts [,5]
+n <- length(x)
+sum((x - mean(x))*(y - mean(y))) / (n - 1) #Calculamos la covarianza  con formula
+cov(x, y) #Funcion de R para obtener la covarianza
+
+#La correlacion tambien es una medida de relacion entre dos variables que permite 
+#Cor(x, y) = Cov(x, y) \ sd(x)sd(y)
+
+cov(x,y) / (sd(x)*sd(y)) #Calculamos la correlacion con formula
+
+cor(x,y) #Funcion de R para obtener la correlacion 
+
+#La correlación nos permite conocer si existe un problema para realizar el 
+#pronostico de nuestra St ]
+### una alta correlacion nos indica que al 
+
+#EJERCICIO
+appl <- read.csv ("F:\\Octavo semestre\\Series de Tiempo\\appl.csv", header = T)
+applts <- ts(appl[,5], start = 2000, frequency = 12)
+
+femsa <- read.csv ("F:\\Octavo semestre\\Series de Tiempo\\femsa.csv", header = T)
+femsats <- ts(femsa[,5], start = 2000, frequency = 12)
+
+bimbo <- read.csv ("F:\\Octavo semestre\\Series de Tiempo\\bimbomx.csv", header = T)
+bimbots <- ts(bimbo[,5], start = 2000, frequency = 12)
+
+#1)
+seasonplot(applts,s= 12, year.labels=TRUE,
+           main="Valor acciones APPLE",
+           ylab="Valor cierre",col=rainbow(20),year.labels.left=TRUE,pch=19)
+
+seasonplot(femsats,s= 12, year.labels=TRUE,
+           main="Valor acciones FEMSA",
+           ylab="Valor cierre",col=rainbow(20),year.labels.left=TRUE,pch=19)
+
+seasonplot(bimbots,s= 12, year.labels=TRUE,
+           main="Valor acciones BIMBO",
+           ylab="Valor cierre",col=rainbow(20),year.labels.left=TRUE,pch=19)
+
+
+#2) 
+x <- applts
+y <- femsats
+z <- bimbots
+
+cor(x,y)
+cor(y,z)
+cor(x,z)
