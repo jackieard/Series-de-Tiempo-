@@ -1,0 +1,53 @@
+####METODOS DE PRONOSTICO####
+install.packages("fpp")
+require(fpp)
+base <- read.csv ("C:\\Users\\SALA-C14\\Desktop\\Tasas.csv")
+base
+t_part <- ts(base [, 3], start = 2005, frequency = 4)
+t_part
+plot(t_part)
+#METODO 1 " MEDIA "
+#Meanf (t_part, h), pronostica los datos observados a travez de la media. 
+#Esta funcion calcula un pronostico dependiendo de los puntos que le des.
+t_partpro <- meanf(t_part, 4)
+plot(t_partpro)
+#t_part es la ST
+
+
+#METODO 2 "INGENUO"
+#PRONOSTICA CON BASE EN EL ULTIMO PERIODO DE LOS VALORES ANTERIORES
+#EJEMPLO: TRIMESTRE 1 DE 2016 TOMA EL DEL AÑO ANTERIOR
+t_parting <- naive(t_part, 4)
+plot(t_parting)
+rwf(t_part, 4) #Alternativo
+
+
+#METODO 3 "INGENUO ESTACIONAL"
+t_partie <- snaive(t_part, 4)
+t_partie
+plot(t_partie)
+  
+
+#METODO 4 "DE LA DERIVA"
+#rwf(st, h, drift = T)
+t_partde <- rwf(t_part, 4, drift = T)
+t_partde
+plot(t_partde)
+
+#EJEMPLO
+
+t_part0 <- window(t_part, start = 2005, end = 2010)
+t_part1 <- meanf(t_part0, h = 4)
+t_part2 <- naive(t_part0, h = 4)
+t_part3 <- snaive(t_part0, h = 4)
+t_part4 <- rwf(t_part0, h = 4, drift = T)
+
+plot(t_part1, plot.conf = F, xlim = c(2005,2011),
+     main = "Proyección tasa de participación ")
+lines(t_part1$mean, col = "light grey")
+lines(t_part2$mean, col = "violet")
+lines(t_part3$mean, col = "skyblue")
+lines(t_part4$mean, col = "light pink")
+legend("topleft", lty = 1, col = c("light grey", "violet", "skyblue", "light pink"), 
+       legend = c("Método media", "Método ingenuo", 
+                 "Método ingenuo estacional", "Método de la deriva"))
