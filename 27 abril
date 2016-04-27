@@ -1,0 +1,58 @@
+##CONTINUACION DE MODELOS DE PRONOSTICO
+#Accuracy es para los residuos de los pronosticos 
+#El rendimiento es de mediciones de la precisión de los pronósticos . 
+#Si se proporciona x , las medidas de la función fuera de la muestra ( de prueba ) la exactitud del pronóstico 
+#basado en x - f . Si no se proporciona x , la función sólo produce dentro de la muestra 
+#(conjunto de entrenamiento ) medidas de precisión de las predicciones basadas en f [ " x " ] - ( f ) equipado.
+
+pib <- read.csv ("F:\\Octavo semestre\\Series de Tiempo\\Bases\\PIB TRIMESTRAL A PRECIOS DE 2008.csv", header = T)
+pib
+pibts <- ts(pib [, 2], start = 1993 , frequency = 4)
+pibts
+plot(pibts)
+Acf(pibts)
+
+#METODO 1 " MEDIA "
+pibm <- meanf(pibts, 4)
+plot(pibm)
+
+#METODO 2 "INGENUO"
+pibin <- naive(pibts, 4)
+plot(pibin)
+rwf(pibts, 4)
+
+#METODO 3 "INGENUO ESTACIONAL"
+pibie <- snaive(pibts, 4)
+pibie
+plot(pibie)
+
+#METODO 4 "DE LA DERIVA"
+#rwf(st, h, drift = T)
+pibde <- rwf(pibts, 4, drift = T)
+pibde
+plot(pibde)
+
+help("accuracy")
+mm <- accuracy(pibm)
+mi <- accuracy(pibin)
+mie <- accuracy(pibie)
+mde <- accuracy(pibde)
+
+mm
+mi
+mie
+mde
+
+#Las medidas calculadas son:
+
+#ME: Error medio
+#RMSE: error de media cuadrática
+#MAE: error absoluto
+#MPE: porcentaje medio de error
+#MAPE: Porcentaje de error medio absoluto
+#MASE: La media de error absoluto Scaled
+#ACF1: autocorrelación de los errores en el retardo 1.
+
+#todos deben tener valor mas cercanos a 0
+
+#Entonces tendemos que tomar el metódo de la deriva.
