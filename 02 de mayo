@@ -1,0 +1,56 @@
+pib <- read.csv("F:\\Octavo semestre\\Series de Tiempo\\Bases\\pibmm.csv")
+pibts <- ts(pib [,2], start = 1896, end = 2015 )
+View(pibts)
+pib1950 <- window(pibts, start = (1950), end= c(2013))
+plot(pib1950)
+
+require(fpp)
+plot(pib1950, main = "Tasa de crecimiento del Pib en México 1950-2013")
+
+res2 <- residuals(snaive(pib1950))
+res3 <- residuals(rwf(pib1950, drift = T))
+res2
+res3
+#Para saber si la varianza es constante:
+plot(res2, main = "Residuales del ingenuo estacional", ylab = "Residuales", xlab="Años") 
+#Para saber si hay o no correlacion en los residuos:
+Acf(res2, main ="ACF de residuales")
+#Para conocer si los residuos se distribuyen normal
+hist(res2, main = "Histograma de residuales")
+
+
+plot(res3, main = "Residuales de la deriva", ylab = "Residuales", xlab="Años")
+Acf(res3, main ="ACF de residuales")
+hist(res3, main = "Histograma de residuales")
+
+
+res1 <- residuals(meanf(pib1950))
+res1
+plot(res1, main = "Residuales de la media", ylab = "Residuales", xlab="Años")
+Acf(res1, main ="ACF de residuales")
+hist(res1, main = "Histograma de residuales")
+
+res4 <- residuals(naive(pib1950))
+res4
+plot(res4, main = "Residuales del ingenuo", ylab = "Residuales", xlab="Años")
+Acf(res4, main ="ACF de residuales")
+hist(res4, main = "Histograma de residuales")
+
+#BOX-PIERCE
+Box.test(res2, lag = 10, fitdf = 0)
+#BOX LJUNG
+Box.test(res2, lag = 10, fitdf = 0, type = "Lj")
+
+Box.test(res3, lag = 10, fitdf = 0)
+Box.test(res3, lag = 10, fitdf = 0, type = "Lj")
+
+Box.test(res1, lag = 10, fitdf = 0)
+Box.test(res1, lag = 10, fitdf = 0, type = "Lj")
+
+Box.test(res4, lag = 10, fitdf = 0)
+Box.test(res4, lag = 10, fitdf = 0, type = "Lj")
+
+
+#Si el pvalue es mayor a .05 no se rechaza la hipotesis nula.
+#Ho: las autocorrelaciones de hasta un desafse k son iguales a 0 (aleatorios independientes)
+#Ha: las autocorrelaciones son diferentes significativamentes de 0 (no hay aleatoriedad ni indep.)
