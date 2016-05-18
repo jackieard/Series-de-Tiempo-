@@ -1,0 +1,135 @@
+#
+require (forecast)
+require (fpp)
+
+tdes <- read.csv("F:\\Octavo semestre\\Series de Tiempo\\Bases\\Tasas.csv", header = T)
+tdests <- ts(tdes [,4] ,start= 2005, frequency = 4)
+
+#Definir modelo
+mod1 <- ses(tdests, alpha=0.2, initial="simple", h=4)
+mod2 <- ses(tdests, alpha=0.6, initial="simple", h=4)
+mod3 <- ses(tdests, alpha=0.1, initial="simple", h=4)
+plot(mod1, plot.conf=FALSE, ylab="Tasa de desocupación",
+     xlab="Año", main="", fcol="white", type="o")
+
+#Graficando ajustes
+lines(fitted(mod1), col="blue", type="o")
+lines(fitted(mod2), col="red", type="o")
+lines(fitted(mod3), col="green", type="o")
+
+#Graficando la media del pronostico
+lines(mod1$mean, col="blue", type="o")
+lines(mod2$mean, col="red", type="o")
+lines(mod3$mean, col="green", type="o")
+legend("topleft",lty=1, col=c(1,"blue","red","green"), 
+       c("data", expression(alpha == 0.2), expression(alpha == 0.6),
+         expression(alpha == 0.1)),pch=1)
+
+aju1 <- mod1$fitted
+aju2 <- mod1$fitted
+aju3 <- mod1$fitted
+
+resmod1 <- (tdests-aju1)
+resmod2 <- (tdests-aju2)
+resmod3 <- (tdests-aju3)
+
+mod123 <- data.frame(tdests, aju1, aju2, aju3, resmod1, resmod2, resmod3)
+View(mod123)
+
+res1 <- (resmod1- mod1$residuals)
+res2 <- (resmod2- mod2$residuals)
+res3 <- (resmod3- mod3$residuals)
+
+res1
+#Una vez que obtengan la grafica de los tres modelos.... 
+#generar en excel una hoja donde nos muestre los datos ajustados (fitted)
+#y se resten a los valores reales... de ahi ver segun los residuales que modelo 
+#es mejor , tambien obtener el m MAE, RMSE, MAPE Y SSE
+
+
+#Ejercicio
+#Serie 1
+tpart <- read.csv("F:\\Octavo semestre\\Series de Tiempo\\Bases\\Tasas.csv", header = T)
+tpartts <- ts(tpart [,3] ,start= 2005, frequency = 4)
+  #Definir modelo
+partmod1 <- ses(tpartts, alpha=0.1, initial="simple", h=4)
+partmod2 <- ses(tpartts, alpha=0.6, initial="simple", h=4)
+partmod3 <- ses(tpartts, alpha=0.9, initial="simple", h=4)
+plot(partmod1, plot.conf=FALSE, ylab="Tasa de participación",
+     xlab="Año", main="", fcol="white", type="o")
+  #Graficando ajustes
+lines(fitted(partmod1), col="blue", type="o")
+lines(fitted(partmod2), col="red", type="o")
+lines(fitted(partmod3), col="green", type="o")
+  #Graficando la media del pronostico
+lines(partmod1$mean, col="blue", type="o")
+lines(partmod2$mean, col="red", type="o")
+lines(partmod3$mean, col="green", type="o")
+legend("topleft",lty=1, col=c(1,"blue","red","green"), 
+       c("data", expression(alpha == 0.1), expression(alpha == 0.6),
+         expression(alpha == 0.9)),pch=1)
+  #METODO 1 " MEDIA "
+tpartm <- meanf(tpartts, 4)
+tpartm
+  #METODO 2 "INGENUO"
+tpartin <- naive(tpartts, 4)
+tpartin
+  #METODO 3 "INGENUO ESTACIONAL"
+tpartie <- snaive(tpartts, 4)
+tpartie
+  #METODO 4 "DE LA DERIVA"
+  #rwf(st, h, drift = T)
+tpartde <- rwf(tpartts, 4, drift = T)
+tpartde
+
+uno <- accuracy(tpartm)
+dos <- accuracy(tpartin)
+tres <- accuracy(tpartie)
+cuatro <- accuracy(tpartde)
+uno
+dos
+tres
+cuatro
+
+#Serie 2
+tpg <- read.csv("F:\\Octavo semestre\\Series de Tiempo\\Bases\\Tasas.csv", header = T)
+tpgts <- ts(tpg [,5] ,start= 2005, frequency = 4)
+  #Definir modelo
+pgmod1 <- ses(tpgts, alpha=0.0001, initial="simple", h=4)
+pgmod2 <- ses(tpgts, alpha=0.5, initial="simple", h=4)
+pgmod3 <- ses(tpgts, alpha=0.987, initial="simple", h=4)
+plot(pgmod1, plot.conf=FALSE, ylab="Tasa de presión general",
+     xlab="Año", main="", fcol="white", type="o")
+  #Graficando ajustes
+lines(fitted(pgmod1), col="blue", type="o")
+lines(fitted(pgmod2), col="red", type="o")
+lines(fitted(pgmod3), col="green", type="o")
+  #Graficando la media del pronostico
+lines(pgmod1$mean, col="blue", type="o")
+lines(pgmod2$mean, col="red", type="o")
+lines(pgmod3$mean, col="green", type="o")
+legend("topleft",lty=1, col=c(1,"blue","red","green"), 
+       c("data", expression(alpha == 0.0001), expression(alpha == 0.5),
+         expression(alpha == 0.987)),pch=1)
+  #METODO 1 " MEDIA "
+tpgm <- meanf(tpgts, 4)
+tpgm
+  #METODO 2 "INGENUO"
+tpgin <- naive(tpgts, 4)
+tpgin
+  #METODO 3 "INGENUO ESTACIONAL"
+tpgie <- snaive(tpgts, 4)
+tpgie
+  #METODO 4 "DE LA DERIVA"
+  #rwf(st, h, drift = T)
+tpgde <- rwf(tpgts, 4, drift = T)
+tpgde
+
+cinco <- accuracy(tpgm)
+seis <- accuracy(tpgin)
+siete <- accuracy(tpgie)
+ocho <- accuracy(tpgde)
+cinco
+seis
+siete
+ocho
