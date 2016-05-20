@@ -1,0 +1,146 @@
+install.packages("foreign")
+install.packages("forecast")
+install.packages("fpp")
+require (foreign)
+require (forecast)
+require (fpp)
+
+#BASE 1
+
+ica <- read.csv("H:\\Octavo semestre\\Series de Tiempo\\Bases\\ica.csv", header = T)
+icats <- ts(ica [,5] ,start= 2013, frequency = 12)
+
+
+#Modelo lineal Holt
+ajuste1 <- holt(icats, alpha = 0.3, beta = 1, initial = "simple", h = 4)
+
+#Modelo holt exponencial
+ajuste2 <- holt(icats, alpha = 0.3, beta = 1, initial = "simple",exponential = T, h = 4)
+
+#Modelo tendencia aditiva amortiguado
+ajuste3 <- holt(icats, damped = T, alpha = 0.3, beta = 0.1, gamma = 0.5)
+
+#Modelo tendencia multiplicativa amortiguado
+ajuste4 <- holt(icats, exponential = T, damped = T, alpha = 0.3, beta = 0.1, gamma = 0.5)
+
+#Modelo holt winter estacinal 
+ajuste5 <-hw(icats, seasonal = "additive")
+
+#Modelo holt winter multiplicativo
+ajuste6 <-hw(icats, seasonal = "multiplicative")
+
+plot(ajuste1, plot.conf=FALSE, ylab="Precio",
+     xlab="Año", main="", fcol="white", type="o")
+
+#Graficando ajustes
+lines(fitted(ajuste1), col="blue", type="o")
+lines(fitted(ajuste2), col="red", type="o")
+lines(fitted(ajuste3), col="green", type="o")
+lines(fitted(ajuste4), col="violet", type="o")
+lines(fitted(ajuste5), col="orange", type="o")
+lines(fitted(ajuste6), col="hellow", type="o")
+
+#Graficando la media del pronostico
+lines(ajuste1$mean, col="blue", type="o")
+lines(ajuste2$mean, col="red", type="o")
+lines(ajuste3$mean, col="green", type="o")
+lines(ajuste4$mean, col="violet", type="o")
+lines(ajuste5$mean, col="orange", type="o")
+lines(ajuste6$mean, col="hellow", type="o")
+legend("topleft",lty=1, col=c(1,"blue","red","green", "violet","orange", "hellow"), 
+       c("icats", expression("Modelo lineal Holt"), expression("Modelo holt exponencial"),
+         expression("Modelo tendencia aditiva amortiguado"), expression("Modelo tendencia multiplicativa amortiguado"),
+         expression("Modelo holt winter estacinal"), expression("Modelo holt winter multiplicativo")
+       ),pch=1)
+
+#METODO 1 " MEDIA "
+icam <- meanf(icats, 4)
+#METODO 2 "INGENUO"
+icain <- naive(icats, 4)
+#METODO 3 "INGENUO ESTACIONAL"
+icaie <- snaive(icats, 4)
+#METODO 4 "DE LA DERIVA"
+#rwf(st, h, drift = T)
+icade <- rwf(icats, 4, drift = T)
+
+uno <- accuracy(icam)
+dos <- accuracy(icain)
+tres <- accuracy(icaie)
+cuatro <- accuracy(icade)
+uno
+dos
+tres
+cuatro
+
+data1<-data.frame(uno,dos,tres,cuatro)
+data1
+
+#BASE 2
+
+bimbo <- read.csv("H:\\Octavo semestre\\Series de Tiempo\\Bases\\bi.csv", header = T)
+bimbots <- ts(ica [,5] ,start= 2013, frequency = 12)
+
+
+#Modelo lineal Holt
+ajuste7 <- holt(bimbots, alpha = 0.3, beta = 1, initial = "simple", h = 4)
+
+#Modelo holt exponencial
+ajuste8 <- holt(bimbots, alpha = 0.3, beta = 1, initial = "simple",exponential = T, h = 4)
+
+#Modelo tendencia aditiva amortiguado
+ajuste9 <- holt(bimbots, damped = T, alpha = 0.3, beta = 0.1, gamma = 0.5)
+
+#Modelo tendencia multiplicativa amortiguado
+ajuste10 <- holt(bimbots, exponential = T, damped = T, alpha = 0.3, beta = 0.1, gamma = 0.5)
+
+#Modelo holt winter estacinal 
+ajuste11 <-hw(bimbots, seasonal = "additive")
+
+#Modelo holt winter multiplicativo
+ajuste12 <-hw(bimbots, seasonal = "multiplicative")
+
+plot(ajuste7, plot.conf=FALSE, ylab="Precio",
+     xlab="Año", main="", fcol="white", type="o")
+
+#Graficando ajustes
+lines(fitted(ajuste7), col="blue", type="o")
+lines(fitted(ajuste8), col="red", type="o")
+lines(fitted(ajuste9), col="green", type="o")
+lines(fitted(ajuste10), col="violet", type="o")
+lines(fitted(ajuste11), col="orange", type="o")
+lines(fitted(ajuste12), col="hellow", type="o")
+
+#Graficando la media del pronostico
+lines(ajuste7$mean, col="blue", type="o")
+lines(ajuste8$mean, col="red", type="o")
+lines(ajuste9$mean, col="green", type="o")
+lines(ajuste10$mean, col="violet", type="o")
+lines(ajuste11$mean, col="orange", type="o")
+lines(ajuste12$mean, col="hellow", type="o")
+legend("topleft",lty=1, col=c(1,"blue","red","green", "violet","orange", "hellow"), 
+       c("bimbots", expression("Modelo lineal Holt"), expression("Modelo holt exponencial"),
+         expression("Modelo tendencia aditiva amortiguado"), expression("Modelo tendencia multiplicativa amortiguado"),
+         expression("Modelo holt winter estacinal"), expression("Modelo holt winter multiplicativo")
+       ),pch=1)
+
+#METODO 1 " MEDIA "
+bimbom <- meanf(bimbots, 4)
+#METODO 2 "INGENUO"
+bimboin <- naive(bimbots, 4)
+#METODO 3 "INGENUO ESTACIONAL"
+bimboie <- snaive(bimbots, 4)
+#METODO 4 "DE LA DERIVA"
+#rwf(st, h, drift = T)
+bimbode <- rwf(bimbots, 4, drift = T)
+
+cinco <- accuracy(bimbom)
+seis <- accuracy(bimboin)
+siete <- accuracy(bimboie)
+ocho <- accuracy(bimbode)
+cinco
+seis
+siete
+ocho
+
+data2<-data.frame(cinco,seis,siete,ocho)
+data2
