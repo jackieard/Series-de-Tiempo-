@@ -1,0 +1,60 @@
+###Ejercicio
+# 1. Elegir una serie de tiempo
+# 2. Aplicar la funcion autoarima (3,1,0)
+# 3. Aplicar la funcion arima (p,q,d) con dos modelos al 
+# que genere la funcion autoarima
+#   3.1 Generar los pronosticos de los 3 modelos
+# 4. Generar la grafica con los valores reales y los valores 
+# ajustados de los 3 modelos
+# 5. Generar grafica con los valores reales y los ajustados 
+# y pronosticados en los 3 modelos de pronostico 
+
+require (fpp)
+tasas <- read.csv ("C:\\Users\\SALA-C15\\Desktop\\Tasas.csv")
+part <- ts(tasas [,3], start  = 2005, frequency = 4)
+part
+
+mod1 <- auto.arima(part, seasonal=FALSE)
+mod1
+names(mod1)
+
+auto.arima(3,1,0)
+#Modelos
+mod2 <- Arima(part,order=c(3,1,0))
+mod3 <- Arima(part,order=c(0,0,1))
+mod4 <- Arima(part,order=c(1,0,0))
+mod5 <- Arima(part,order=c(2,1,0))
+mod6 <- Arima(part,order=c(0,1,0))
+
+#Pronosticos
+pro1<- forecast (mod2, h=4)
+pro2<- forecast (mod3, h=4)
+pro3<- forecast (mod4, h=4)
+pro4<- forecast (mod5, h=4)
+pro5<- forecast (mod6, h=4)
+
+fitted (pro1)
+fitted (pro2)
+fitted (pro3)
+fitted (pro4)
+fitted (pro5)
+
+#Grafica
+plot(pro1, plot.conf=FALSE, ylab="Tasa de participacion",
+     xlab="Año", main="", fcol="white", type="o")
+lines(fitted(pro1), col="skyblue", type="o")
+lines(fitted(pro2), col="grey", type="o")
+lines(fitted(pro3), col="green", type="o")
+lines(fitted(pro4), col="pink", type="o")
+lines(fitted(pro5), col="red", type="o")
+lines(pro1$mean, col="skyblue", type="o")
+lines(pro2$mean, col="grey", type="o")
+lines(pro3$mean, col="green", type="o")
+lines(pro4$mean, col="pink", type="o")
+lines(pro5$mean, col="red", type="o")
+
+#Grafica
+legend("topleft",lty=1, col=c(1,"skyblue","grey","green","pink","red"), 
+       c("data", expression("Modelo 1"), expression("Modelo 2"),
+         expression("Modelo 3"), expression("Modelo 4"), 
+         expression("Modelo 5")),pch=10)
